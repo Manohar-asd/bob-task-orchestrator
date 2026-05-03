@@ -519,6 +519,37 @@
             runAllSection.classList.add('visible');
         }
 
+        // Send prompt to Bob IDE chat
+        function sendToBobChat(prompt, taskId) {
+            // Method 1: Bob IDE extension API (if running as Bob plugin)
+            if (window.acquireVsCodeApi) {
+                const vscode = window.acquireVsCodeApi();
+                vscode.postMessage({
+                    type: 'sendToChat',
+                    prompt: prompt,
+                    taskId: taskId
+                });
+                return true;
+            }
+            
+            // Method 2: postMessage to parent (if in iframe)
+            if (window.parent !== window) {
+                window.parent.postMessage({
+                    type: 'bob-chat-prompt',
+                    prompt: prompt
+                }, '*');
+                return true;
+            }
+            
+            // Method 3: Auto copy to clipboard (browser fallback)
+            navigator.clipboard.writeText(prompt).then(() => {
+                const statusText = document.getElementById('statusText');
+                statusText.textContent = '✓ Prompt copied — paste into Bob chat with Ctrl+V';
+                statusText.className = 'status-text success';
+            });
+            return false;
+        }
+
         // Run a single task
         async function runTask(taskId) {
             const taskCard = document.querySelector(`[data-task-id="${taskId}"]`);
@@ -545,28 +576,19 @@
 
                 const data = await response.json();
                 
-                // Automatically copy prompt to clipboard
-                if (data.bob_prompt) {
-                    try {
-                        await navigator.clipboard.writeText(data.bob_prompt);
-                        
-                        // Update button to show success
-                        runBtn.textContent = '✓ Copied to Bob';
-                        runBtn.style.background = '#3fb950';
-                        
-                        // Show status message
-                        const statusText = document.getElementById('statusText');
-                        statusText.textContent = 'Prompt auto-copied — paste into Bob chat with Ctrl+V';
-                        statusText.className = 'status-text success';
-                        
-                        // Reset button after 3 seconds
-                        setTimeout(() => {
-                            runBtn.textContent = originalBtnText;
-                            runBtn.style.background = originalBtnBg;
-                        }, 3000);
-                    } catch (clipError) {
-                        console.error('Clipboard copy failed:', clipError);
-                    }
+                // Send prompt to Bob chat immediately after task completes
+                if (data.bob_prompt && data.status === 'done') {
+                    sendToBobChat(data.bob_prompt, taskId);
+                    
+                    // Update button to show success
+                    runBtn.textContent = '✓ Copied to Bob';
+                    runBtn.style.background = '#3fb950';
+                    
+                    // Reset button after 3 seconds
+                    setTimeout(() => {
+                        runBtn.textContent = originalBtnText;
+                        runBtn.style.background = originalBtnBg;
+                    }, 3000);
                 }
                 
                 // Refresh tasks to show updated status and prompt
