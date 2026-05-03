@@ -1,0 +1,10 @@
+{
+  "name": "Bob Task Orchestrator",
+  "version": "1.0.0",
+  "description": "Turn a developer goal into AI-orchestrated tasks without leaving Bob IDE",
+  "entry": "panel.html",
+  "type": "sidebar-panel",
+  "icon": "⚡",
+  "minimum_bob_version": "1.0.0",
+  "permissions": ["network"]
+}
