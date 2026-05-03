@@ -6,5 +6,24 @@
   "type": "sidebar-panel",
   "icon": "⚡",
   "minimum_bob_version": "1.0.0",
-  "permissions": ["network"]
+  "permissions": ["network", "clipboard", "chat"],
+  "contributes": {
+    "views": {
+      "sidebar": {
+        "id": "bto.panel",
+        "name": "Bob Task Orchestrator",
+        "icon": "⚡"
+      }
+    },
+    "commands": [
+      {
+        "command": "bto.generateTasks",
+        "title": "BTO: Generate Tasks from Goal"
+      },
+      {
+        "command": "bto.runAll",
+        "title": "BTO: Run All Pending Tasks"
+      }
+    ]
+  }
 }
