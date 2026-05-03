@@ -12,76 +12,142 @@
         }
 
         body {
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
-            background: #1e1e1e;
-            color: #d4d4d4;
-            padding: 16px;
-            line-height: 1.6;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+            background: #141414;
+            color: #e0e0e0;
+            padding: 20px;
+            line-height: 1.5;
         }
 
+        /* Header */
         .header {
             display: flex;
             justify-content: space-between;
             align-items: center;
-            margin-bottom: 24px;
-            padding-bottom: 12px;
-            border-bottom: 1px solid #333;
+            margin-bottom: 20px;
         }
 
-        .header h1 {
-            font-size: 20px;
+        .header-left {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .header-icon {
+            width: 28px;
+            height: 28px;
+            background: #5b4fe8;
+            border-radius: 6px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 16px;
+        }
+
+        .header-title {
+            font-size: 16px;
             font-weight: 600;
+            color: #e0e0e0;
         }
 
-        .mock-badge {
-            display: none;
-            background: #3a3a00;
-            color: #f0a500;
-            padding: 4px 8px;
+        .status-badge {
+            padding: 4px 10px;
             border-radius: 4px;
-            font-size: 11px;
+            font-size: 10px;
             font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
         }
 
-        .mock-badge.visible {
-            display: block;
+        .status-badge.live {
+            background: #003a20;
+            color: #3fb950;
         }
 
-        .goal-input-section {
-            margin-bottom: 24px;
+        .status-badge.mock {
+            background: #3a3000;
+            color: #f0a500;
+        }
+
+        /* Stats Bar */
+        .stats-bar {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 12px;
+            margin-bottom: 20px;
+        }
+
+        .stat-card {
+            background: #1e1e1e;
+            border: 1px solid #2a2a2a;
+            border-radius: 8px;
+            padding: 12px;
+            text-align: center;
+        }
+
+        .stat-value {
+            font-size: 18px;
+            font-weight: 700;
+            color: #ffffff;
+            margin-bottom: 4px;
+        }
+
+        .stat-value.green {
+            color: #3fb950;
+        }
+
+        .stat-label {
+            font-size: 10px;
+            text-transform: uppercase;
+            color: #555;
+            letter-spacing: 0.5px;
+        }
+
+        /* Input Section */
+        .input-section {
+            margin-bottom: 20px;
         }
 
         textarea {
             width: 100%;
-            min-height: 100px;
+            height: 68px;
             padding: 12px;
-            background: #2d2d2d;
-            border: 1px solid #444;
-            border-radius: 6px;
-            color: #d4d4d4;
+            background: #1e1e1e;
+            border: 1px solid #2a2a2a;
+            border-radius: 8px;
+            color: #e0e0e0;
             font-family: inherit;
-            font-size: 14px;
-            resize: vertical;
+            font-size: 13px;
+            resize: none;
             margin-bottom: 12px;
+            transition: border-color 0.2s;
         }
 
         textarea:focus {
             outline: none;
-            border-color: #7c6af7;
+            border-color: #5b4fe8;
         }
 
         textarea::placeholder {
-            color: #888;
+            color: #555;
+        }
+
+        .button-row {
+            display: flex;
+            gap: 8px;
         }
 
         .btn {
             padding: 10px 16px;
             border: none;
             border-radius: 6px;
-            font-size: 14px;
+            font-size: 13px;
             font-weight: 500;
             cursor: pointer;
             transition: all 0.2s;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
         }
 
         .btn:disabled {
@@ -90,55 +156,77 @@
         }
 
         .btn-primary {
-            background: #7c6af7;
+            background: #5b4fe8;
             color: white;
+            flex: 1;
         }
 
         .btn-primary:hover:not(:disabled) {
-            background: #6b5ce7;
+            background: #4a3ed7;
         }
 
         .btn-secondary {
-            background: #3a3a3a;
-            color: #d4d4d4;
-            margin-left: 8px;
+            background: #1e1e1e;
+            color: #e0e0e0;
+            border: 1px solid #2a2a2a;
         }
 
         .btn-secondary:hover:not(:disabled) {
-            background: #4a4a4a;
+            background: #242424;
         }
 
-        .status-text {
+        .status-line {
             margin-top: 12px;
-            font-size: 13px;
+            font-size: 12px;
             color: #888;
-            min-height: 20px;
+            min-height: 18px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
         }
 
-        .status-text.error {
-            color: #f85149;
-        }
-
-        .status-text.success {
+        .status-line.success {
             color: #3fb950;
         }
 
+        .status-line.error {
+            color: #f85149;
+        }
+
+        .status-dot {
+            width: 6px;
+            height: 6px;
+            background: #3fb950;
+            border-radius: 50%;
+            animation: pulse 1.5s ease-in-out infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.3; }
+        }
+
+        /* Task Cards */
         .tasks-section {
             margin-bottom: 24px;
         }
 
         .task-card {
-            background: #2d2d2d;
-            border: 1px solid #444;
-            border-left: 3px solid #555;
-            border-radius: 6px;
+            background: #1a1a1a;
+            border: 1px solid #242424;
+            border-left: 3px solid #333;
+            border-radius: 8px;
             padding: 16px;
             margin-bottom: 12px;
             transition: all 0.2s;
         }
 
+        .task-card:hover {
+            border-color: #2a2a2a;
+        }
+
         .task-card.pending {
-            border-left-color: #555;
+            border-left-color: #333;
         }
 
         .task-card.running {
@@ -160,24 +248,38 @@
             margin-bottom: 8px;
         }
 
-        .task-title {
-            font-size: 15px;
-            font-weight: 600;
+        .task-title-row {
+            display: flex;
+            align-items: center;
+            gap: 10px;
             flex: 1;
         }
 
-        .task-badge {
-            padding: 4px 8px;
-            border-radius: 4px;
+        .task-number {
             font-size: 11px;
+            color: #555;
+            font-weight: 600;
+            min-width: 20px;
+        }
+
+        .task-title {
+            font-size: 14px;
+            font-weight: 600;
+            color: #e0e0e0;
+        }
+
+        .task-badge {
+            padding: 3px 8px;
+            border-radius: 4px;
+            font-size: 10px;
             font-weight: 600;
             text-transform: uppercase;
-            margin-left: 12px;
+            letter-spacing: 0.5px;
         }
 
         .task-badge.pending {
-            background: #555;
-            color: #d4d4d4;
+            background: #1e1e1e;
+            color: #666;
         }
 
         .task-badge.running {
@@ -196,68 +298,107 @@
         }
 
         .task-description {
-            font-size: 13px;
-            color: #aaa;
+            font-size: 12px;
+            color: #666;
             margin-bottom: 12px;
-            line-height: 1.5;
+            line-height: 1.6;
+        }
+
+        .task-meta {
+            font-size: 11px;
+            color: #555;
+            margin-bottom: 12px;
         }
 
         .task-actions {
             display: flex;
             gap: 8px;
+            margin-bottom: 12px;
         }
 
         .btn-run {
             padding: 6px 12px;
             font-size: 12px;
+            background: transparent;
+            border: 1px solid #2a2a2a;
+            color: #e0e0e0;
+        }
+
+        .btn-run:hover:not(:disabled) {
+            border-color: #5b4fe8;
+            color: #5b4fe8;
+        }
+
+        .btn-run.success {
+            background: #003a20;
+            border-color: #3fb950;
+            color: #3fb950;
+        }
+
+        .prompt-container {
+            margin-top: 12px;
         }
 
         .prompt-box {
-            background: #1a1a1a;
-            border: 1px solid #333;
-            border-radius: 4px;
+            background: #111;
+            border: 1px solid #1e1e1e;
+            border-radius: 6px;
             padding: 12px;
-            margin-top: 12px;
             font-family: 'Courier New', monospace;
-            font-size: 12px;
+            font-size: 11px;
+            color: #aaa;
+            max-height: 80px;
+            overflow-y: auto;
+            position: relative;
             white-space: pre-wrap;
             word-wrap: break-word;
-            color: #d4d4d4;
-            max-height: 300px;
-            overflow-y: auto;
+        }
+
+        .prompt-box::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            height: 20px;
+            background: linear-gradient(transparent, #111);
+            pointer-events: none;
         }
 
         .btn-copy {
-            padding: 4px 8px;
-            font-size: 11px;
             margin-top: 8px;
+            padding: 4px 10px;
+            font-size: 11px;
+            background: transparent;
+            border: 1px solid #1e1e1e;
+            color: #666;
         }
 
-        .run-all-section {
-            margin-bottom: 24px;
-            display: none;
+        .btn-copy:hover:not(:disabled) {
+            border-color: #2a2a2a;
+            color: #e0e0e0;
         }
 
-        .run-all-section.visible {
-            display: block;
-        }
-
+        /* History Section */
         .history-section {
             margin-top: 32px;
-            padding-top: 16px;
-            border-top: 1px solid #333;
+            padding-top: 20px;
+            border-top: 1px solid #1e1e1e;
         }
 
         .history-toggle {
-            color: #7c6af7;
+            color: #444;
             cursor: pointer;
-            font-size: 14px;
+            font-size: 13px;
             font-weight: 500;
             user-select: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
         }
 
         .history-toggle:hover {
-            text-decoration: underline;
+            color: #666;
         }
 
         .history-list {
@@ -270,89 +411,106 @@
         }
 
         .history-item {
-            background: #2d2d2d;
-            border: 1px solid #444;
-            border-radius: 4px;
-            padding: 10px 12px;
+            background: #1a1a1a;
+            border: 1px solid #242424;
+            border-radius: 6px;
+            padding: 12px;
             margin-bottom: 8px;
             cursor: pointer;
-            font-size: 13px;
             transition: all 0.2s;
         }
 
         .history-item:hover {
-            background: #3a3a3a;
-            border-color: #555;
+            background: #1e1e1e;
+            border-color: #2a2a2a;
         }
 
         .history-item-text {
-            color: #d4d4d4;
+            color: #e0e0e0;
+            font-size: 13px;
             overflow: hidden;
             text-overflow: ellipsis;
             white-space: nowrap;
+            margin-bottom: 4px;
         }
 
-        .history-item-date {
-            color: #888;
+        .history-item-meta {
+            color: #555;
             font-size: 11px;
-            margin-top: 4px;
         }
 
         .empty-state {
             text-align: center;
             padding: 40px 20px;
-            color: #888;
+            color: #555;
+            font-size: 13px;
         }
 
-        .spinner {
-            display: inline-block;
-            width: 14px;
-            height: 14px;
-            border: 2px solid #444;
-            border-top-color: #7c6af7;
-            border-radius: 50%;
-            animation: spin 0.8s linear infinite;
-            margin-right: 8px;
-            vertical-align: middle;
+        /* Scrollbar */
+        ::-webkit-scrollbar {
+            width: 8px;
+            height: 8px;
         }
 
-        @keyframes spin {
-            to { transform: rotate(360deg); }
+        ::-webkit-scrollbar-track {
+            background: #141414;
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: #2a2a2a;
+            border-radius: 4px;
+        }
+
+        ::-webkit-scrollbar-thumb:hover {
+            background: #333;
         }
     </style>
 </head>
 <body>
     <!-- Header -->
     <div class="header">
-        <h1>⚡ Bob Task Orchestrator</h1>
-        <div class="mock-badge" id="mockBadge">MOCK MODE</div>
+        <div class="header-left">
+            <div class="header-icon">⚡</div>
+            <div class="header-title">Bob Task Orchestrator</div>
+        </div>
+        <div class="status-badge live" id="statusBadge">LIVE — GRANITE</div>
     </div>
 
     <!-- Stats Bar -->
-    <div id="statsBar" style="display:flex;gap:12px;margin-bottom:16px;padding:10px 12px;background:#2d2d2d;border-radius:6px;font-size:12px">
-        <span>🎯 Goals: <b id="statGoals">0</b></span>
-        <span>✅ Done: <b id="statDone">0</b></span>
-        <span>📊 Rate: <b id="statRate">0%</b></span>
-        <span>⏱ Saved: <b id="statSaved" style="color:#3fb950">0 mins</b></span>
+    <div class="stats-bar">
+        <div class="stat-card">
+            <div class="stat-value" id="statGoals">0</div>
+            <div class="stat-label">Goals</div>
+        </div>
+        <div class="stat-card">
+            <div class="stat-value" id="statDone">0</div>
+            <div class="stat-label">Tasks Done</div>
+        </div>
+        <div class="stat-card">
+            <div class="stat-value" id="statRate">0%</div>
+            <div class="stat-label">Completion</div>
+        </div>
+        <div class="stat-card">
+            <div class="stat-value green" id="statSaved">0 mins</div>
+            <div class="stat-label">Time Saved</div>
+        </div>
     </div>
 
-    <!-- Goal Input Section -->
-    <div class="goal-input-section">
+    <!-- Input Section -->
+    <div class="input-section">
         <textarea 
             id="goalInput" 
             placeholder="Describe your developer goal…&#10;&#10;Example: Build a REST API for user management with authentication, CRUD operations, and PostgreSQL database"
         ></textarea>
-        <button class="btn btn-primary" id="generateBtn" onclick="submitGoal()">
-            ⚡ Generate Tasks
-        </button>
-        <div class="status-text" id="statusText"></div>
-    </div>
-
-    <!-- Run All Section -->
-    <div class="run-all-section" id="runAllSection">
-        <button class="btn btn-secondary" id="runAllBtn" onclick="runAll()">
-            ▶ Run All Tasks
-        </button>
+        <div class="button-row">
+            <button class="btn btn-primary" id="generateBtn" onclick="submitGoal()">
+                ⚡ Generate Tasks
+            </button>
+            <button class="btn btn-secondary" id="runAllBtn" onclick="runAll()">
+                ▶ Run All
+            </button>
+        </div>
+        <div class="status-line" id="statusLine"></div>
     </div>
 
     <!-- Tasks Section -->
@@ -362,10 +520,11 @@
         </div>
     </div>
 
-    <!-- Past Goals Section -->
+    <!-- History Section -->
     <div class="history-section">
         <div class="history-toggle" onclick="toggleHistory()">
-            <span id="historyToggleIcon">▸</span> Past Goals
+            <span id="historyToggleIcon">▸</span>
+            <span id="historyToggleText">Past goals</span>
         </div>
         <div class="history-list" id="historyList"></div>
     </div>
@@ -377,6 +536,7 @@
         // Global State
         let currentGoalId = null;
         let pollingInterval = null;
+        let statsInterval = null;
         let isRunningAll = false;
 
         // Initialize on page load
@@ -384,7 +544,13 @@
             checkHealth();
             loadPastGoals();
             loadStats();
+            startStatsPolling();
         });
+
+        // Start polling stats every 10 seconds
+        function startStatsPolling() {
+            statsInterval = setInterval(loadStats, 10000);
+        }
 
         // Load statistics
         async function loadStats() {
@@ -395,7 +561,9 @@
                 document.getElementById('statDone').textContent = s.completed_tasks;
                 document.getElementById('statRate').textContent = s.completion_rate + '%';
                 document.getElementById('statSaved').textContent = s.time_saved_minutes + ' mins';
-            } catch(e) {}
+            } catch(e) {
+                console.error('Failed to load stats:', e);
+            }
         }
 
         // Check API health and mock mode
@@ -404,8 +572,13 @@
                 const response = await fetch(`${API}/health`);
                 const data = await response.json();
                 
+                const badge = document.getElementById('statusBadge');
                 if (data.mock_mode) {
-                    document.getElementById('mockBadge').classList.add('visible');
+                    badge.textContent = 'MOCK MODE';
+                    badge.className = 'status-badge mock';
+                } else {
+                    badge.textContent = 'LIVE — GRANITE';
+                    badge.className = 'status-badge live';
                 }
             } catch (error) {
                 console.error('Health check failed:', error);
@@ -416,20 +589,20 @@
         async function submitGoal() {
             const goalInput = document.getElementById('goalInput');
             const generateBtn = document.getElementById('generateBtn');
-            const statusText = document.getElementById('statusText');
+            const statusLine = document.getElementById('statusLine');
             
             const goalText = goalInput.value.trim();
             if (!goalText) {
-                statusText.textContent = 'Please enter a goal';
-                statusText.className = 'status-text error';
+                statusLine.innerHTML = 'Please enter a goal';
+                statusLine.className = 'status-line error';
                 return;
             }
 
             // Disable input during generation
             generateBtn.disabled = true;
             goalInput.disabled = true;
-            statusText.innerHTML = '<span class="spinner"></span>Generating tasks with AI...';
-            statusText.className = 'status-text';
+            statusLine.innerHTML = '<span class="status-dot"></span>Generating tasks with AI...';
+            statusLine.className = 'status-line';
 
             try {
                 const response = await fetch(`${API}/goals`, {
@@ -449,21 +622,22 @@
                 renderTasks(data.tasks);
                 
                 // Show success
-                statusText.textContent = `✓ Generated ${data.tasks.length} tasks`;
-                statusText.className = 'status-text success';
+                statusLine.textContent = `✓ Generated ${data.tasks.length} tasks`;
+                statusLine.className = 'status-line success';
                 
                 // Clear input
                 goalInput.value = '';
                 
-                // Reload past goals
+                // Reload past goals and stats
                 loadPastGoals();
+                loadStats();
                 
                 // Start polling for updates
                 startPolling();
                 
             } catch (error) {
-                statusText.textContent = `Error: ${error.message}`;
-                statusText.className = 'status-text error';
+                statusLine.textContent = `Error: ${error.message}`;
+                statusLine.className = 'status-line error';
             } finally {
                 generateBtn.disabled = false;
                 goalInput.disabled = false;
@@ -473,11 +647,9 @@
         // Render tasks in the UI
         function renderTasks(tasks) {
             const tasksSection = document.getElementById('tasksSection');
-            const runAllSection = document.getElementById('runAllSection');
             
             if (!tasks || tasks.length === 0) {
                 tasksSection.innerHTML = '<div class="empty-state">No tasks generated</div>';
-                runAllSection.classList.remove('visible');
                 return;
             }
 
@@ -485,25 +657,44 @@
             tasks.sort((a, b) => a.order - b.order);
 
             // Build HTML
-            const html = tasks.map(task => {
+            const html = tasks.map((task, index) => {
                 const statusClass = task.status || 'pending';
+                const taskNumber = String(index + 1).padStart(2, '0');
+                
+                // Calculate time ago for completed tasks
+                let timeAgo = '';
+                if (task.status === 'done' && task.updated_at) {
+                    const updated = new Date(task.updated_at);
+                    const now = new Date();
+                    const seconds = Math.floor((now - updated) / 1000);
+                    if (seconds < 60) timeAgo = `${seconds}s ago`;
+                    else if (seconds < 3600) timeAgo = `${Math.floor(seconds / 60)}m ago`;
+                    else timeAgo = `${Math.floor(seconds / 3600)}h ago`;
+                }
+                
                 const promptHtml = task.bob_prompt ? `
-                    <div class="prompt-box">${escapeHtml(task.bob_prompt)}</div>
-                    <button class="btn btn-secondary btn-copy" onclick="copyPrompt(${task.id})">
-                        📋 Copy Prompt
-                    </button>
+                    <div class="prompt-container">
+                        <div class="prompt-box">${escapeHtml(task.bob_prompt)}</div>
+                        <button class="btn btn-copy" onclick="copyPrompt(${task.id})">
+                            📋 Copy prompt
+                        </button>
+                    </div>
                 ` : '';
 
                 return `
                     <div class="task-card ${statusClass}" data-task-id="${task.id}">
                         <div class="task-header">
-                            <div class="task-title">${escapeHtml(task.title)}</div>
+                            <div class="task-title-row">
+                                <div class="task-number">${taskNumber}</div>
+                                <div class="task-title">${escapeHtml(task.title)}</div>
+                            </div>
                             <div class="task-badge ${statusClass}">${statusClass}</div>
                         </div>
                         <div class="task-description">${escapeHtml(task.description)}</div>
+                        ${timeAgo ? `<div class="task-meta">${timeAgo}</div>` : ''}
                         <div class="task-actions">
                             <button 
-                                class="btn btn-primary btn-run" 
+                                class="btn btn-run" 
                                 onclick="runTask(${task.id})"
                                 ${statusClass !== 'pending' ? 'disabled' : ''}
                             >
@@ -516,7 +707,6 @@
             }).join('');
 
             tasksSection.innerHTML = html;
-            runAllSection.classList.add('visible');
         }
 
         // Send prompt to Bob IDE chat
@@ -524,28 +714,28 @@
             // Method 1: Bob IDE extension API (if running as Bob plugin)
             if (window.acquireVsCodeApi) {
                 const vscode = window.acquireVsCodeApi();
-                vscode.postMessage({
-                    type: 'sendToChat',
+                vscode.postMessage({ 
+                    type: 'sendToChat', 
                     prompt: prompt,
-                    taskId: taskId
+                    taskId: taskId 
                 });
                 return true;
             }
             
             // Method 2: postMessage to parent (if in iframe)
             if (window.parent !== window) {
-                window.parent.postMessage({
-                    type: 'bob-chat-prompt',
-                    prompt: prompt
+                window.parent.postMessage({ 
+                    type: 'bob-chat-prompt', 
+                    prompt: prompt 
                 }, '*');
                 return true;
             }
             
             // Method 3: Auto copy to clipboard (browser fallback)
             navigator.clipboard.writeText(prompt).then(() => {
-                const statusText = document.getElementById('statusText');
-                statusText.textContent = '✓ Prompt copied — paste into Bob chat with Ctrl+V';
-                statusText.className = 'status-text success';
+                const statusLine = document.getElementById('statusLine');
+                statusLine.textContent = '✓ Prompt copied — paste into Bob chat with Ctrl+V';
+                statusLine.className = 'status-line success';
             });
             return false;
         }
@@ -557,12 +747,10 @@
 
             const runBtn = taskCard.querySelector('.btn-run');
             const originalBtnText = runBtn.textContent;
-            const originalBtnBg = runBtn.style.background;
             
             // Update button to show sending state
             runBtn.disabled = true;
             runBtn.textContent = 'Sending to Bob...';
-            runBtn.style.background = '#f0a500';
 
             try {
                 const response = await fetch(`${API}/tasks/${taskId}/run`, {
@@ -581,13 +769,13 @@
                     sendToBobChat(data.bob_prompt, taskId);
                     
                     // Update button to show success
-                    runBtn.textContent = '✓ Copied to Bob';
-                    runBtn.style.background = '#3fb950';
+                    runBtn.textContent = '✓ Sent to Bob';
+                    runBtn.classList.add('success');
                     
                     // Reset button after 3 seconds
                     setTimeout(() => {
                         runBtn.textContent = originalBtnText;
-                        runBtn.style.background = originalBtnBg;
+                        runBtn.classList.remove('success');
                     }, 3000);
                 }
                 
@@ -602,7 +790,6 @@
             } catch (error) {
                 alert(`Error running task: ${error.message}`);
                 runBtn.textContent = originalBtnText;
-                runBtn.style.background = originalBtnBg;
                 runBtn.disabled = false;
             }
         }
@@ -612,15 +799,15 @@
             if (isRunningAll) return;
             
             const runAllBtn = document.getElementById('runAllBtn');
-            const statusText = document.getElementById('statusText');
+            const statusLine = document.getElementById('statusLine');
             
             // Get all pending tasks
             const pendingTasks = Array.from(document.querySelectorAll('.task-card.pending'))
                 .map(card => parseInt(card.dataset.taskId));
             
             if (pendingTasks.length === 0) {
-                statusText.textContent = 'No pending tasks to run';
-                statusText.className = 'status-text';
+                statusLine.textContent = 'No pending tasks to run';
+                statusLine.className = 'status-line';
                 return;
             }
 
@@ -629,8 +816,8 @@
 
             for (let i = 0; i < pendingTasks.length; i++) {
                 const taskId = pendingTasks[i];
-                statusText.innerHTML = `<span class="spinner"></span>Running task ${i + 1} of ${pendingTasks.length}...`;
-                statusText.className = 'status-text';
+                statusLine.innerHTML = `<span class="status-dot"></span>Running task ${i + 1} of ${pendingTasks.length}...`;
+                statusLine.className = 'status-line';
                 
                 try {
                     await runTask(taskId);
@@ -641,8 +828,8 @@
                 }
             }
 
-            statusText.textContent = '✓ All tasks completed';
-            statusText.className = 'status-text success';
+            statusLine.textContent = '✓ All tasks completed';
+            statusLine.className = 'status-line success';
             isRunningAll = false;
             runAllBtn.disabled = false;
         }
@@ -691,11 +878,16 @@
                 const goals = await response.json();
                 
                 const historyList = document.getElementById('historyList');
+                const toggleText = document.getElementById('historyToggleText');
                 
                 if (!goals || goals.length === 0) {
                     historyList.innerHTML = '<div class="empty-state">No past goals yet</div>';
+                    toggleText.textContent = 'Past goals';
                     return;
                 }
+
+                // Update toggle text with count
+                toggleText.textContent = `Past goals (${goals.length} total)`;
 
                 // Take last 20 goals
                 const recentGoals = goals.slice(0, 20);
@@ -705,7 +897,7 @@
                     return `
                         <div class="history-item" data-goal-id="${goal.id}" onclick="loadGoalFromElement(this)">
                             <div class="history-item-text">${escapeHtml(goal.text)}</div>
-                            <div class="history-item-date">${date} • ${goal.task_count} tasks • ${goal.completed_tasks} done</div>
+                            <div class="history-item-meta">${goal.task_count} tasks • ${goal.completed_tasks} done • ${date}</div>
                         </div>
                     `;
                 }).join('');
@@ -717,7 +909,7 @@
             }
         }
 
-        // Load goal from history element (safer than inline onclick with string interpolation)
+        // Load goal from history element
         function loadGoalFromElement(el) {
             const goalId = parseInt(el.dataset.goalId);
             const goalText = el.querySelector('.history-item-text').textContent;
@@ -728,24 +920,24 @@
         async function loadGoal(goalId, goalText) {
             currentGoalId = goalId;
             
-            const statusText = document.getElementById('statusText');
-            statusText.innerHTML = '<span class="spinner"></span>Loading tasks...';
-            statusText.className = 'status-text';
+            const statusLine = document.getElementById('statusLine');
+            statusLine.innerHTML = '<span class="status-dot"></span>Loading tasks...';
+            statusLine.className = 'status-line';
 
             try {
                 const response = await fetch(`${API}/goals/${goalId}/tasks`);
                 const tasks = await response.json();
                 
                 renderTasks(tasks);
-                statusText.textContent = `Loaded: ${goalText.substring(0, 50)}...`;
-                statusText.className = 'status-text success';
+                statusLine.textContent = `Loaded: ${goalText.substring(0, 50)}...`;
+                statusLine.className = 'status-line success';
                 
                 // Start polling
                 startPolling();
                 
             } catch (error) {
-                statusText.textContent = `Error loading goal: ${error.message}`;
-                statusText.className = 'status-text error';
+                statusLine.textContent = `Error loading goal: ${error.message}`;
+                statusLine.className = 'status-line error';
             }
         }
 
