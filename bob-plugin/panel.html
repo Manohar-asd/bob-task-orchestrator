@@ -498,10 +498,87 @@
             runAllSection.classList.add('visible');
         }
 
+        // Send prompt to Bob IDE chat
+        async function sendToBobChat(prompt, taskId) {
+            const taskCard = document.querySelector(`[data-task-id="${taskId}"]`);
+            const runBtn = taskCard?.querySelector('.btn-run');
+            
+            // Method 1: Try Bob IDE extension API
+            if (window.bob && window.bob.chat && typeof window.bob.chat.send === 'function') {
+                try {
+                    window.bob.chat.send(prompt);
+                    if (runBtn) {
+                        runBtn.textContent = 'Sent to Bob ✓';
+                        runBtn.style.background = '#3fb950';
+                    }
+                    return true;
+                } catch (error) {
+                    console.log('Bob API method failed, trying postMessage:', error);
+                }
+            }
+            
+            // Method 2: Try postMessage to Bob IDE
+            try {
+                window.postMessage({
+                    type: 'bob-chat',
+                    action: 'send',
+                    prompt: prompt
+                }, '*');
+                
+                // Also try parent window if in iframe
+                if (window.parent !== window) {
+                    window.parent.postMessage({
+                        type: 'bob-chat',
+                        action: 'send',
+                        prompt: prompt
+                    }, '*');
+                }
+                
+                if (runBtn) {
+                    runBtn.textContent = 'Sent to Bob ✓';
+                    runBtn.style.background = '#3fb950';
+                }
+                return true;
+            } catch (error) {
+                console.log('postMessage method failed, falling back to clipboard:', error);
+            }
+            
+            // Method 3: Fallback to clipboard
+            try {
+                await navigator.clipboard.writeText(prompt);
+                if (runBtn) {
+                    runBtn.textContent = 'Copied to clipboard ✓';
+                    runBtn.style.background = '#3fb950';
+                }
+                
+                // Show status message
+                const statusText = document.getElementById('statusText');
+                statusText.textContent = '📋 Prompt copied to Bob clipboard - paste in chat to continue';
+                statusText.className = 'status-text success';
+                
+                return true;
+            } catch (error) {
+                console.error('All methods failed:', error);
+                if (runBtn) {
+                    runBtn.textContent = 'Failed to send';
+                    runBtn.style.background = '#f85149';
+                }
+                return false;
+            }
+        }
+
         // Run a single task
         async function runTask(taskId) {
             const taskCard = document.querySelector(`[data-task-id="${taskId}"]`);
             if (!taskCard) return;
+
+            const runBtn = taskCard.querySelector('.btn-run');
+            const originalBtnText = runBtn.textContent;
+            
+            // Update button to show sending state
+            runBtn.disabled = true;
+            runBtn.textContent = 'Sending to Bob...';
+            runBtn.style.background = '#f0a500';
 
             try {
                 const response = await fetch(`${API}/tasks/${taskId}/run`, {
@@ -515,13 +592,21 @@
 
                 const data = await response.json();
                 
-                // Refresh tasks to show updated status
+                // Automatically send prompt to Bob chat
+                if (data.bob_prompt) {
+                    await sendToBobChat(data.bob_prompt, taskId);
+                }
+                
+                // Refresh tasks to show updated status and prompt
                 if (currentGoalId) {
                     await refreshTasks();
                 }
                 
             } catch (error) {
                 alert(`Error running task: ${error.message}`);
+                runBtn.textContent = originalBtnText;
+                runBtn.style.background = '';
+                runBtn.disabled = false;
             }
         }
 
