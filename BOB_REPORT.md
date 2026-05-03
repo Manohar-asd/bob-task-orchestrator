@@ -1,0 +1,1 @@
+{"globalSettings":{"allowedCommands":["git log","git diff","git show"],"mode":"code","customModes":[],"customModePrompts":{"java-modernization":{}},"hasOpenedModeSelector":true}}
