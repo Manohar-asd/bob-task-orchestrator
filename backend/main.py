@@ -200,6 +200,29 @@ async def execute_task(task_id: int) -> dict[str, Any]:
     
     return result
 
+@app.get("/stats")
+async def get_stats() -> dict[str, Any]:
+    """
+    Get statistics about goals and tasks.
+    
+    Returns:
+        Dictionary with total goals, tasks, completion rate, and time saved
+    """
+    goals = get_all_goals()
+    total_goals = len(goals)
+    total_tasks = sum(g.get("task_count") or 0 for g in goals)
+    completed_tasks = sum(g.get("completed_tasks") or 0 for g in goals)
+    completion_rate = round((completed_tasks / total_tasks * 100) if total_tasks > 0 else 0, 1)
+    time_saved = completed_tasks * 15
+    
+    return {
+        "total_goals": total_goals,
+        "total_tasks": total_tasks,
+        "completed_tasks": completed_tasks,
+        "completion_rate": completion_rate,
+        "time_saved_minutes": time_saved
+    }
+
 
 # Run the application
 if __name__ == "__main__":
