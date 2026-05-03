@@ -328,6 +328,14 @@
         <div class="mock-badge" id="mockBadge">MOCK MODE</div>
     </div>
 
+    <!-- Stats Bar -->
+    <div id="statsBar" style="display:flex;gap:12px;margin-bottom:16px;padding:10px 12px;background:#2d2d2d;border-radius:6px;font-size:12px">
+        <span>🎯 Goals: <b id="statGoals">0</b></span>
+        <span>✅ Done: <b id="statDone">0</b></span>
+        <span>📊 Rate: <b id="statRate">0%</b></span>
+        <span>⏱ Saved: <b id="statSaved" style="color:#3fb950">0 mins</b></span>
+    </div>
+
     <!-- Goal Input Section -->
     <div class="goal-input-section">
         <textarea 
@@ -375,7 +383,20 @@
         window.addEventListener('DOMContentLoaded', () => {
             checkHealth();
             loadPastGoals();
+            loadStats();
         });
+
+        // Load statistics
+        async function loadStats() {
+            try {
+                const res = await fetch(`${API}/stats`);
+                const s = await res.json();
+                document.getElementById('statGoals').textContent = s.total_goals;
+                document.getElementById('statDone').textContent = s.completed_tasks;
+                document.getElementById('statRate').textContent = s.completion_rate + '%';
+                document.getElementById('statSaved').textContent = s.time_saved_minutes + ' mins';
+            } catch(e) {}
+        }
 
         // Check API health and mock mode
         async function checkHealth() {
@@ -498,75 +519,6 @@
             runAllSection.classList.add('visible');
         }
 
-        // Send prompt to Bob IDE chat
-        async function sendToBobChat(prompt, taskId) {
-            const taskCard = document.querySelector(`[data-task-id="${taskId}"]`);
-            const runBtn = taskCard?.querySelector('.btn-run');
-            
-            // Method 1: Try Bob IDE extension API
-            if (window.bob && window.bob.chat && typeof window.bob.chat.send === 'function') {
-                try {
-                    window.bob.chat.send(prompt);
-                    if (runBtn) {
-                        runBtn.textContent = 'Sent to Bob ✓';
-                        runBtn.style.background = '#3fb950';
-                    }
-                    return true;
-                } catch (error) {
-                    console.log('Bob API method failed, trying postMessage:', error);
-                }
-            }
-            
-            // Method 2: Try postMessage to Bob IDE
-            try {
-                window.postMessage({
-                    type: 'bob-chat',
-                    action: 'send',
-                    prompt: prompt
-                }, '*');
-                
-                // Also try parent window if in iframe
-                if (window.parent !== window) {
-                    window.parent.postMessage({
-                        type: 'bob-chat',
-                        action: 'send',
-                        prompt: prompt
-                    }, '*');
-                }
-                
-                if (runBtn) {
-                    runBtn.textContent = 'Sent to Bob ✓';
-                    runBtn.style.background = '#3fb950';
-                }
-                return true;
-            } catch (error) {
-                console.log('postMessage method failed, falling back to clipboard:', error);
-            }
-            
-            // Method 3: Fallback to clipboard
-            try {
-                await navigator.clipboard.writeText(prompt);
-                if (runBtn) {
-                    runBtn.textContent = 'Copied to clipboard ✓';
-                    runBtn.style.background = '#3fb950';
-                }
-                
-                // Show status message
-                const statusText = document.getElementById('statusText');
-                statusText.textContent = '📋 Prompt copied to Bob clipboard - paste in chat to continue';
-                statusText.className = 'status-text success';
-                
-                return true;
-            } catch (error) {
-                console.error('All methods failed:', error);
-                if (runBtn) {
-                    runBtn.textContent = 'Failed to send';
-                    runBtn.style.background = '#f85149';
-                }
-                return false;
-            }
-        }
-
         // Run a single task
         async function runTask(taskId) {
             const taskCard = document.querySelector(`[data-task-id="${taskId}"]`);
@@ -574,6 +526,7 @@
 
             const runBtn = taskCard.querySelector('.btn-run');
             const originalBtnText = runBtn.textContent;
+            const originalBtnBg = runBtn.style.background;
             
             // Update button to show sending state
             runBtn.disabled = true;
@@ -592,9 +545,28 @@
 
                 const data = await response.json();
                 
-                // Automatically send prompt to Bob chat
+                // Automatically copy prompt to clipboard
                 if (data.bob_prompt) {
-                    await sendToBobChat(data.bob_prompt, taskId);
+                    try {
+                        await navigator.clipboard.writeText(data.bob_prompt);
+                        
+                        // Update button to show success
+                        runBtn.textContent = '✓ Copied to Bob';
+                        runBtn.style.background = '#3fb950';
+                        
+                        // Show status message
+                        const statusText = document.getElementById('statusText');
+                        statusText.textContent = 'Prompt auto-copied — paste into Bob chat with Ctrl+V';
+                        statusText.className = 'status-text success';
+                        
+                        // Reset button after 3 seconds
+                        setTimeout(() => {
+                            runBtn.textContent = originalBtnText;
+                            runBtn.style.background = originalBtnBg;
+                        }, 3000);
+                    } catch (clipError) {
+                        console.error('Clipboard copy failed:', clipError);
+                    }
                 }
                 
                 // Refresh tasks to show updated status and prompt
@@ -602,10 +574,13 @@
                     await refreshTasks();
                 }
                 
+                // Reload stats after task completion
+                loadStats();
+                
             } catch (error) {
                 alert(`Error running task: ${error.message}`);
                 runBtn.textContent = originalBtnText;
-                runBtn.style.background = '';
+                runBtn.style.background = originalBtnBg;
                 runBtn.disabled = false;
             }
         }
