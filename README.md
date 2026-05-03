@@ -12,7 +12,7 @@ uvicorn main:app --reload --port 8000
 
 Then open `bob-plugin/panel.html` in Bob IDE as a sidebar panel.
 
-## Demo Goals (copy-paste these to impress judges)
+## Demo Goals
 
 1. **"Add input validation and error handling to all API endpoints in this FastAPI project"**
 
